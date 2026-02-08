@@ -53,7 +53,6 @@ src/markpost/
 
 ## Git commits
 
-- Do NOT include "Co-Authored-By" tags in commit messages
 - Use conventional commits: `feat:`, `fix:`, `chore:`, `docs:`, `test:`
 - Keep commits atomic — one logical change per commit
 
