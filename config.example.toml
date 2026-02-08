@@ -1,0 +1,19 @@
+# config.example.toml — copy to ~/.markpost/config.toml and fill in values
+
+[twitter]
+api_key = ""
+api_secret = ""
+access_token = ""
+access_token_secret = ""
+
+[threads]
+access_token = ""
+user_id = ""
+
+[blog]
+s3_bucket = "my-blog-bucket"
+s3_prefix = "posts/"
+base_url = "https://blog.example.com"
+
+[blog.aws]
+region = "us-east-1"
