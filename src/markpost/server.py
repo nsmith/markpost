@@ -65,9 +65,11 @@ async def publish_post(
     return results
 
 
+import re
+
+
 def _slugify(text: str) -> str:
     """Convert text to a URL-safe slug."""
-    import re
     slug = text.lower().strip()
     slug = re.sub(r"[^\w\s-]", "", slug)
     slug = re.sub(r"[\s_]+", "-", slug)

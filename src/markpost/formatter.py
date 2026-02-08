@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import re
-from html import unescape
+from html import escape
 
 import markdown
 
@@ -135,7 +135,7 @@ def markdown_to_html(text: str, title: str | None = None) -> str:
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title}</title>
+<title>{escape(title)}</title>
 </head>
 <body>
 {body}

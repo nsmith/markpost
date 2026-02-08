@@ -1,6 +1,4 @@
 # tests/test_config.py
-import tempfile
-import os
 from pathlib import Path
 
 
