@@ -75,5 +75,46 @@ def _slugify(text: str) -> str:
     return slug.strip("-")
 
 
+@mcp.tool
+def preview_post(
+    content: Annotated[str, Field(description="Markdown-formatted content to preview")],
+    title: Annotated[str | None, Field(description="Post title (for blog preview)")] = None,
+    platforms: Annotated[
+        list[str],
+        Field(description="Platforms to preview for: 'twitter', 'threads', 'blog'. Defaults to all."),
+    ] = None,
+) -> dict:
+    """Preview how content will be formatted for each platform.
+
+    Returns the formatted text and thread splits without actually publishing.
+    Use this to verify formatting before calling publish_post.
+    """
+    if platforms is None:
+        platforms = ["twitter", "threads", "blog"]
+
+    results: dict = {}
+    plain = markdown_to_plain(content)
+
+    if "twitter" in platforms:
+        parts = split_into_thread(plain, max_chars=TWITTER_CHAR_LIMIT)
+        results["twitter"] = {
+            "parts": parts,
+            "char_counts": [len(p) for p in parts],
+        }
+
+    if "threads" in platforms:
+        parts = split_into_thread(plain, max_chars=THREADS_CHAR_LIMIT)
+        results["threads"] = {
+            "parts": parts,
+            "char_counts": [len(p) for p in parts],
+        }
+
+    if "blog" in platforms:
+        html = markdown_to_html(content, title=title)
+        results["blog"] = {"html": html}
+
+    return results
+
+
 if __name__ == "__main__":
     mcp.run()

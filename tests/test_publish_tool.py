@@ -64,3 +64,31 @@ async def test_publish_post_single_platform(mock_config, monkeypatch):
     assert "twitter" in result
     assert "threads" not in result
     assert "blog" not in result
+
+
+def test_preview_post():
+    from markpost.server import preview_post
+
+    result = preview_post.fn(
+        content="# Title\n\nHello **world**.\n\n---\n\nSecond part.",
+        platforms=["twitter", "threads"],
+    )
+
+    assert "twitter" in result
+    assert "threads" in result
+    assert len(result["twitter"]["parts"]) == 2
+    assert len(result["threads"]["parts"]) == 2
+    assert "**" not in result["twitter"]["parts"][0]
+
+
+def test_preview_post_blog():
+    from markpost.server import preview_post
+
+    result = preview_post.fn(
+        content="# Title\n\nBody.",
+        title="My Post",
+        platforms=["blog"],
+    )
+
+    assert "blog" in result
+    assert "<h1>Title</h1>" in result["blog"]["html"]
