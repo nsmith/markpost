@@ -6,8 +6,8 @@ def test_load_config_from_file(tmp_path):
     config_file = tmp_path / "config.toml"
     config_file.write_text("""
 [twitter]
-api_key = "tk"
-api_secret = "ts"
+consumer_key = "tk"
+consumer_secret = "ts"
 access_token = "at"
 access_token_secret = "ats"
 
@@ -26,8 +26,8 @@ region = "us-east-1"
     from markpost.config import load_config
 
     config = load_config(config_file)
-    assert config.twitter.api_key == "tk"
-    assert config.twitter.api_secret == "ts"
+    assert config.twitter.consumer_key == "tk"
+    assert config.twitter.consumer_secret == "ts"
     assert config.twitter.access_token == "at"
     assert config.twitter.access_token_secret == "ats"
     assert config.threads.access_token == "threads_token"
@@ -42,8 +42,8 @@ def test_load_config_default_path(tmp_path, monkeypatch):
     config_file = tmp_path / "config.toml"
     config_file.write_text("""
 [twitter]
-api_key = "k"
-api_secret = "s"
+consumer_key = "k"
+consumer_secret = "s"
 access_token = "a"
 access_token_secret = "as"
 
@@ -59,15 +59,15 @@ base_url = "https://example.com"
     from markpost.config import load_config
 
     config = load_config()
-    assert config.twitter.api_key == "k"
+    assert config.twitter.consumer_key == "k"
 
 
 def test_config_missing_optional_fields(tmp_path):
     config_file = tmp_path / "config.toml"
     config_file.write_text("""
 [twitter]
-api_key = "k"
-api_secret = "s"
+consumer_key = "k"
+consumer_secret = "s"
 access_token = "a"
 access_token_secret = "as"
 
@@ -105,8 +105,8 @@ def test_config_partial_platforms(tmp_path):
     config_file = tmp_path / "config.toml"
     config_file.write_text("""
 [twitter]
-api_key = "k"
-api_secret = "s"
+consumer_key = "k"
+consumer_secret = "s"
 access_token = "a"
 access_token_secret = "as"
 

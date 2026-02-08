@@ -13,8 +13,8 @@ except ModuleNotFoundError:
 
 @dataclass(frozen=True)
 class TwitterConfig:
-    api_key: str
-    api_secret: str
+    consumer_key: str
+    consumer_secret: str
     access_token: str
     access_token_secret: str
 

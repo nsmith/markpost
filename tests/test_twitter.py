@@ -14,7 +14,7 @@ def test_post_single_tweet():
         client.create_tweet.return_value = mock_response
 
         config = TwitterConfig(
-            api_key="k", api_secret="s",
+            consumer_key="k", consumer_secret="s",
             access_token="a", access_token_secret="as",
         )
         result = post_to_twitter(["Hello world"], config)
@@ -38,7 +38,7 @@ def test_post_thread():
         client.create_tweet.side_effect = responses
 
         config = TwitterConfig(
-            api_key="k", api_secret="s",
+            consumer_key="k", consumer_secret="s",
             access_token="a", access_token_secret="as",
         )
         result = post_to_twitter(["Part 1", "Part 2", "Part 3"], config)

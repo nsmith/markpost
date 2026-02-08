@@ -8,8 +8,8 @@ def mock_config(tmp_path):
     config_file = tmp_path / "config.toml"
     config_file.write_text("""
 [twitter]
-api_key = "k"
-api_secret = "s"
+consumer_key = "k"
+consumer_secret = "s"
 access_token = "a"
 access_token_secret = "as"
 

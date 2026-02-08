@@ -13,8 +13,8 @@ def post_to_twitter(parts: list[str], config: TwitterConfig) -> list[str]:
     Returns a list of tweet IDs.
     """
     client = tweepy.Client(
-        consumer_key=config.api_key,
-        consumer_secret=config.api_secret,
+        consumer_key=config.consumer_key,
+        consumer_secret=config.consumer_secret,
         access_token=config.access_token,
         access_token_secret=config.access_token_secret,
     )

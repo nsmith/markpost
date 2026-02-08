@@ -39,8 +39,8 @@ Edit `~/.markpost/config.toml`:
 
 ```toml
 [twitter]
-api_key = "your-api-key"
-api_secret = "your-api-secret"
+consumer_key = "your-consumer-key"
+consumer_secret = "your-consumer-secret"
 access_token = "your-access-token"
 access_token_secret = "your-access-token-secret"
 
@@ -139,7 +139,7 @@ Start the server in HTTP mode (see above), then point your client at `http://loc
 1. Go to the [Twitter Developer Portal](https://developer.twitter.com/)
 2. Create a Project and App
 3. Set app permissions to **Read and Write**
-4. Generate your API Key, API Secret, Access Token, and Access Token Secret
+4. Generate your Consumer Key (API Key), Consumer Secret (API Secret), Access Token, and Access Token Secret
 5. If you changed permissions after generating tokens, **regenerate them**
 
 The free tier allows 1,500 tweets/month.
