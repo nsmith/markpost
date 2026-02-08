@@ -35,9 +35,9 @@ class BlogConfig:
 
 @dataclass(frozen=True)
 class MarkpostConfig:
-    twitter: TwitterConfig
-    threads: ThreadsConfig
     blog: BlogConfig
+    twitter: TwitterConfig | None = None
+    threads: ThreadsConfig | None = None
 
 
 def load_config(path: Path | None = None) -> MarkpostConfig:
@@ -45,6 +45,9 @@ def load_config(path: Path | None = None) -> MarkpostConfig:
 
     If no path is given, reads from MARKPOST_CONFIG env var,
     falling back to ~/.markpost/config.toml.
+
+    Only the [blog] section is required. [twitter] and [threads]
+    are optional — omit them if you haven't set up those platforms yet.
     """
     if path is None:
         env = os.environ.get("MARKPOST_CONFIG")
@@ -56,8 +59,8 @@ def load_config(path: Path | None = None) -> MarkpostConfig:
     with open(path, "rb") as f:
         raw = tomllib.load(f)
 
-    twitter = TwitterConfig(**raw["twitter"])
-    threads = ThreadsConfig(**raw["threads"])
+    twitter = TwitterConfig(**raw["twitter"]) if "twitter" in raw else None
+    threads = ThreadsConfig(**raw["threads"]) if "threads" in raw else None
 
     blog_raw = dict(raw["blog"])
     aws = blog_raw.pop("aws", {})

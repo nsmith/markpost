@@ -84,3 +84,39 @@ base_url = "https://example.com"
     config = load_config(config_file)
     assert config.blog.s3_prefix == ""
     assert config.blog.aws_region == "us-east-1"
+
+
+def test_config_blog_only(tmp_path):
+    config_file = tmp_path / "config.toml"
+    config_file.write_text("""
+[blog]
+s3_bucket = "my-blog"
+base_url = "https://blog.example.com"
+""")
+    from markpost.config import load_config
+
+    config = load_config(config_file)
+    assert config.twitter is None
+    assert config.threads is None
+    assert config.blog.s3_bucket == "my-blog"
+
+
+def test_config_partial_platforms(tmp_path):
+    config_file = tmp_path / "config.toml"
+    config_file.write_text("""
+[twitter]
+api_key = "k"
+api_secret = "s"
+access_token = "a"
+access_token_secret = "as"
+
+[blog]
+s3_bucket = "b"
+base_url = "https://example.com"
+""")
+    from markpost.config import load_config
+
+    config = load_config(config_file)
+    assert config.twitter is not None
+    assert config.threads is None
+    assert config.blog is not None

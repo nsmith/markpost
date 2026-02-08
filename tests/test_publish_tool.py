@@ -66,6 +66,47 @@ async def test_publish_post_single_platform(mock_config, monkeypatch):
     assert "blog" not in result
 
 
+@pytest.fixture
+def blog_only_config(tmp_path):
+    config_file = tmp_path / "config.toml"
+    config_file.write_text("""
+[blog]
+s3_bucket = "b"
+base_url = "https://example.com"
+""")
+    return str(config_file)
+
+
+@pytest.mark.asyncio
+async def test_publish_post_blog_only(blog_only_config, monkeypatch):
+    monkeypatch.setenv("MARKPOST_CONFIG", blog_only_config)
+
+    with patch("markpost.server.publish_to_blog", return_value="https://example.com/post.html"):
+        from markpost.server import publish_post
+
+        result = await publish_post.fn(
+            content="# Hello\n\nBlog post.",
+            title="Hello",
+        )
+
+    assert "blog" in result
+    assert "twitter" not in result
+    assert "threads" not in result
+
+
+@pytest.mark.asyncio
+async def test_publish_post_unconfigured_platform_raises(blog_only_config, monkeypatch):
+    monkeypatch.setenv("MARKPOST_CONFIG", blog_only_config)
+
+    from markpost.server import publish_post
+
+    with pytest.raises(ValueError, match="Twitter is not configured"):
+        await publish_post.fn(
+            content="Hello",
+            platforms=["twitter"],
+        )
+
+
 def test_preview_post():
     from markpost.server import preview_post
 

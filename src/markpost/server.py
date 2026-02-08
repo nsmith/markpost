@@ -38,20 +38,24 @@ async def publish_post(
     - Threads: Converts to plain text, auto-splits into threads at 500 chars
     - Blog: Renders full HTML and uploads to S3
     """
-    if platforms is None:
-        platforms = ["twitter", "threads", "blog"]
-
     config = load_config()
-    results: dict = {}
 
+    if platforms is None:
+        platforms = _configured_platforms(config)
+
+    results: dict = {}
     plain = markdown_to_plain(content)
 
     if "twitter" in platforms:
+        if config.twitter is None:
+            raise ValueError("Twitter is not configured. Add a [twitter] section to your config.")
         parts = split_into_thread(plain, max_chars=TWITTER_CHAR_LIMIT)
         tweet_ids = post_to_twitter(parts, config.twitter)
         results["twitter"] = {"tweet_ids": tweet_ids, "parts": len(parts)}
 
     if "threads" in platforms:
+        if config.threads is None:
+            raise ValueError("Threads is not configured. Add a [threads] section to your config.")
         parts = split_into_thread(plain, max_chars=THREADS_CHAR_LIMIT)
         post_ids = await post_to_threads(parts, config.threads)
         results["threads"] = {"post_ids": post_ids, "parts": len(parts)}
@@ -63,6 +67,16 @@ async def publish_post(
         results["blog"] = {"url": url}
 
     return results
+
+
+def _configured_platforms(config) -> list[str]:
+    """Return the list of platforms that have config sections present."""
+    platforms = ["blog"]
+    if config.twitter is not None:
+        platforms.append("twitter")
+    if config.threads is not None:
+        platforms.append("threads")
+    return platforms
 
 
 import re
