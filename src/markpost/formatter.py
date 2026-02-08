@@ -117,3 +117,27 @@ def _split_on_words(text: str, max_chars: int) -> list[str]:
         parts.append(current)
 
     return parts
+
+
+def markdown_to_html(text: str, title: str | None = None) -> str:
+    """Convert Markdown to HTML.
+
+    If title is provided, wraps in a full HTML document.
+    Otherwise returns just the body HTML fragment.
+    """
+    body = markdown.markdown(text)
+
+    if title is None:
+        return body
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+</head>
+<body>
+{body}
+</body>
+</html>"""

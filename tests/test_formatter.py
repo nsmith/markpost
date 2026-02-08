@@ -80,3 +80,22 @@ def test_split_respects_separator_over_limit():
     md = "Part A.\n\n---\n\nPart B."
     parts = split_into_thread(md, max_chars=5000)
     assert len(parts) == 2
+
+
+def test_markdown_to_html_basic():
+    from markpost.formatter import markdown_to_html
+
+    md = "# Hello\n\nA **bold** paragraph."
+    html = markdown_to_html(md)
+    assert "<h1>Hello</h1>" in html
+    assert "<strong>bold</strong>" in html
+
+
+def test_markdown_to_html_wraps_in_template():
+    from markpost.formatter import markdown_to_html
+
+    md = "# Title\n\nBody."
+    html = markdown_to_html(md, title="My Post")
+    assert "<title>My Post</title>" in html
+    assert "<!DOCTYPE html>" in html
+    assert "<h1>Title</h1>" in html
